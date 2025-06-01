@@ -1,0 +1,239 @@
+# Resume Analyzer API (v1.1.0)
+
+This project provides a modular API for parsing resumes and matching them against job descriptions using NLP techniques.
+
+## Features (Enhanced)
+
+*   Parses resumes from PDF, DOCX, and TXT formats.
+*   Extracts key information into a structured JSON format (based on JSON Resume schema), with **enhanced parsing for work experience dates, education details (GPA, courses), projects, and certificates**.
+*   Matches resumes against job descriptions using:
+    *   Semantic similarity (Sentence Transformers) for overall content comparison.
+    *   Granular field matching for:
+        *   **Skills (including exact and semantic matching)**
+        *   **Years of Experience (calculated from non-overlapping work periods)**
+        *   **Education Level**
+*   Provides a weighted final match score.
+*   **Returns detailed matching results**, including matched/missing/semantically-matched skills, suitable for frontend display.
+*   Exposes functionality via a FastAPI backend API.
+*   Modular codebase for easier maintenance and extension.
+*   **Includes robust logging and error handling**.
+
+## Project Structure
+
+```
+/
+|-- resume_analyzer/         # Core logic module
+|   |-- __init__.py
+|   |-- config.py            # Configuration settings (models, keywords)
+|   |-- models.py            # NLP model loading functions
+|   |-- text_extractor.py    # File text extraction logic
+|   |-- utils.py             # Utility functions (regex, section splitting)
+|   |-- parser.py            # Resume parsing and information extraction (Enhanced)
+|   |-- matcher.py           # Resume-JD matching logic (Enhanced)
+|-- api.py                   # FastAPI application server (Enhanced with logging/error handling)
+|-- main_analyzer.py         # Command-line interface (Optional - may need updates)
+|-- requirements.txt         # Python dependencies
+|-- temp_uploads/            # Temporary directory for file uploads (created by api.py)
+|-- README.md                # This file
+```
+
+## Setup Instructions
+
+1.  **Clone/Download:** Obtain the project files.
+2.  **Create Virtual Environment (Recommended):**
+    ```bash
+    python3 -m venv venv
+    source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+    ```
+3.  **Install Dependencies:**
+    ```bash
+    pip install -r requirements.txt
+    ```
+4.  **Download spaCy Model:** The system uses `en_core_web_trf`. Download it:
+    ```bash
+    python -m spacy download en_core_web_trf
+    ```
+    *Note: The first time models are loaded (spaCy or Sentence Transformer), they might be downloaded automatically, which can take some time.*
+
+## Running the API Server
+
+1.  **Start the Server:** Use uvicorn to run the FastAPI application:
+    ```bash
+    uvicorn api:app --host 0.0.0.0 --port 8000
+    ```
+    *   `--host 0.0.0.0` makes the server accessible on your network.
+    *   `--port 8000` specifies the port (change if needed).
+    *   Add `--reload` during development for automatic code reloading (may not work in all environments).
+
+2.  **Access API Docs:** Once running, open your browser and go to `http://<your-server-ip>:8000/docs` (or `http://127.0.0.1:8000/docs` if running locally) to access the interactive Swagger UI documentation and test the `/analyze/` endpoint.
+
+## API Response Structure
+
+The `/analyze/` endpoint returns a JSON object like this:
+
+```json
+{
+  "message": "Analysis successful",
+  "parsed_resume": { /* ... Standard JSON Resume structure ... */ },
+  "match_results": {
+    "match_percentage": 91.5,
+    "details": {
+      "semantic_score": 0.85,
+      "skill_score": 0.9,
+      "matched_skills": ["React", "TypeScript", "JavaScript", ...],
+      "missing_skills": ["GraphQL"],
+      "semantically_matched_skills": [("RESTful APIs", "REST API", 0.88)],
+      "experience_score": 1.0,
+      "education_score": 1.0,
+      "calculated_resume_experience_years": 8.5,
+      "weights": { /* ... weights used ... */ },
+      "parsed_jd": { /* ... parsed JD details ... */ }
+    }
+  }
+}
+```
+
+## Deployment Notes
+
+*   **Persistent Hosting:** Use cloud VMs, PaaS (Heroku, Render), or containers (Docker/Kubernetes).
+*   **Process Management:** Use `systemd` or `supervisor`.
+*   **Reverse Proxy:** Use Nginx or Caddy for SSL, etc.
+*   **Dependencies:** Ensure `requirements.txt` and the spaCy model are installed.
+*   **Logging:** Configure logging levels and output destinations as needed in `api.py` or via a logging config file passed to Uvicorn.
+
+## Areas for Further Enhancement
+
+*   **Custom NER:** Train a custom spaCy NER model on resume data for significantly higher extraction accuracy across all fields.
+*   **Skill Taxonomy Integration:** Map extracted skills to a standard taxonomy for better normalization and matching.
+*   **OCR Integration:** Add OCR (e.g., Tesseract) to handle image-based PDFs.
+*   **Web UI:** Build a user-friendly web interface.
+*   **Configuration:** Use environment variables or a dedicated config file format (YAML, TOML).
+
+# Resume Analyzer API - Client Testing Guide
+
+## System Requirements
+- Python 3.8 or higher
+- 4GB RAM minimum
+- Internet connection (for initial setup)
+
+## Setup Instructions
+
+1. **Install Python**
+   - Download and install Python 3.8 or higher from [python.org](https://python.org)
+   - During installation, make sure to check "Add Python to PATH"
+
+2. **Set Up the Environment**
+   ```bash
+   # Create a virtual environment
+   python -m venv venv
+
+   # Activate the virtual environment
+   # On Windows:
+   venv\Scripts\activate
+   # On macOS/Linux:
+   source venv/bin/activate
+
+   # Install dependencies
+   pip install -r requirements.txt
+
+   # Download required spaCy model
+   python -m spacy download en_core_web_trf
+   ```
+
+3. **Start the API Server**
+   ```bash
+   python api.py
+   ```
+   The server will start at http://localhost:8000
+
+## Testing the API
+
+1. **Access the API Documentation**
+   - Open your web browser and go to http://localhost:8000/docs
+   - This will show you the interactive API documentation
+
+2. **Test the Resume Analysis**
+   - Use the `/analyze/` endpoint
+   - Upload a resume file (PDF, DOCX, or TXT)
+   - Upload a job description file (PDF, DOCX, or TXT)
+   - Click "Execute" to run the analysis
+
+3. **Expected Response**
+   The API will return a JSON response containing:
+   - Parsed resume data
+   - Match score against the job description
+   - Detailed matching information
+
+## Troubleshooting
+
+1. **If the server won't start:**
+   - Make sure no other service is using port 8000
+   - Check if Python and all dependencies are installed correctly
+   - Verify the virtual environment is activated
+
+2. **If file uploads fail:**
+   - Ensure the files are in supported formats (PDF, DOCX, TXT)
+   - Check file size (should be under 10MB)
+   - Verify you have write permissions in the temp_uploads directory
+
+3. **If analysis fails:**
+   - Check the console output for error messages
+   - Ensure the spaCy model is installed correctly
+   - Verify the input files contain readable text
+
+## Support
+
+For any issues or questions, please contact:
+[Your Contact Information]
+
+## Notes
+- The system creates temporary files in the `temp_uploads` directory
+- These files are automatically cleaned up after processing
+- The API runs locally on your machine
+
+## Docker Setup Instructions
+
+### Prerequisites
+- Docker installed on your system
+- Git (for cloning the repository)
+
+### Running with Docker
+
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd ResumeMatch
+```
+
+2. Build the Docker image:
+```bash
+docker build -t resume-analyzer .
+```
+
+3. Run the container:
+```bash
+docker run -p 8000:8000 resume-analyzer
+```
+
+The application will be available at:
+- Main API: http://localhost:8000
+- API Documentation: http://localhost:8000/docs
+- Health Check: http://localhost:8000/health
+
+### Additional Docker Commands
+
+- Run in detached mode:
+```bash
+docker run -d -p 8000:8000 resume-analyzer
+```
+
+- View logs:
+```bash
+docker logs <container_id>
+```
+
+- Stop the container:
+```bash
+docker stop <container_id>
+```
+
