@@ -1,0 +1,31 @@
+# -*- coding: utf-8 -*-
+# Requirements for the Resume Analyzer API
+
+# Core NLP and ML
+spacy>=3.5.0
+transformers>=4.30.0
+sentence-transformers>=2.2.0
+torch>=2.0.0
+numpy>=1.21.0
+protobuf>=3.20.0
+tiktoken>=0.3.0
+
+# File Parsing
+PyPDF2>=3.0.0
+python-docx>=1.0.0
+
+# API Framework
+fastapi>=0.68.0
+uvicorn>=0.15.0
+python-multipart>=0.0.5
+
+# Utilities
+python-dateutil>=2.8.0 # For date parsing
+requests>=2.31.0 # For testing
+
+# spaCy Model (Needs separate download command)
+# Example: python -m spacy download en_core_web_trf
+# Ensure the specific model used (en_core_web_trf) is downloaded during setup.
+
+pydantic>=1.8.0
+

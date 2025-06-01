@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+
+# Build artifacts
+dist/
+build/
+
+# Environment variables
+.env
+
+# OS temporary files
+.DS_Store
+Thumbs.db
+
+# Python specific
+__pycache__/
+*.pyc
+*.orig
+venv/
+.venv/
+env/
+*.egg-info/
+*.dist-info/
+.coverage/ 
+
+.temp_uploads/

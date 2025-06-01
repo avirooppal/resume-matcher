@@ -1,0 +1,7 @@
+Title: Technical Product Manager
+Requirements:
+- Agile
+- Scrum
+- Product Roadmaps
+- JIRA
+- Stakeholder Management
