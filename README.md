@@ -93,28 +93,7 @@ The `/analyze/` endpoint returns a JSON object like this:
 }
 ```
 
-## Deployment Notes
-
-*   **Persistent Hosting:** Use cloud VMs, PaaS (Heroku, Render), or containers (Docker/Kubernetes).
-*   **Process Management:** Use `systemd` or `supervisor`.
-*   **Reverse Proxy:** Use Nginx or Caddy for SSL, etc.
-*   **Dependencies:** Ensure `requirements.txt` and the spaCy model are installed.
-*   **Logging:** Configure logging levels and output destinations as needed in `api.py` or via a logging config file passed to Uvicorn.
-
-## Areas for Further Enhancement
-
-*   **Custom NER:** Train a custom spaCy NER model on resume data for significantly higher extraction accuracy across all fields.
-*   **Skill Taxonomy Integration:** Map extracted skills to a standard taxonomy for better normalization and matching.
-*   **OCR Integration:** Add OCR (e.g., Tesseract) to handle image-based PDFs.
-*   **Web UI:** Build a user-friendly web interface.
-*   **Configuration:** Use environment variables or a dedicated config file format (YAML, TOML).
-
-# Resume Analyzer API - Client Testing Guide
-
-## System Requirements
-- Python 3.8 or higher
-- 4GB RAM minimum
-- Internet connection (for initial setup)
+# Resume Analyzer API -  Guide
 
 ## Setup Instructions
 
@@ -164,73 +143,12 @@ The `/analyze/` endpoint returns a JSON object like this:
    - Match score against the job description
    - Detailed matching information
 
-## Troubleshooting
-
-1. **If the server won't start:**
-   - Make sure no other service is using port 8000
-   - Check if Python and all dependencies are installed correctly
-   - Verify the virtual environment is activated
-
-2. **If file uploads fail:**
-   - Ensure the files are in supported formats (PDF, DOCX, TXT)
-   - Check file size (should be under 10MB)
-   - Verify you have write permissions in the temp_uploads directory
-
-3. **If analysis fails:**
-   - Check the console output for error messages
-   - Ensure the spaCy model is installed correctly
-   - Verify the input files contain readable text
-
-## Support
-
-For any issues or questions, please contact:
-[Your Contact Information]
-
 ## Notes
 - The system creates temporary files in the `temp_uploads` directory
 - These files are automatically cleaned up after processing
 - The API runs locally on your machine
 
-## Docker Setup Instructions
 
-### Prerequisites
-- Docker installed on your system
-- Git (for cloning the repository)
-
-### Running with Docker
-
-1. Clone the repository:
-```bash
-git clone <repository-url>
-cd ResumeMatch
-```
-
-2. Build the Docker image:
-```bash
-docker build -t resume-analyzer .
-```
-
-3. Run the container:
-```bash
-docker run -p 8000:8000 resume-analyzer
-```
-
-The application will be available at:
-- Main API: http://localhost:8000
-- API Documentation: http://localhost:8000/docs
-- Health Check: http://localhost:8000/health
-
-### Additional Docker Commands
-
-- Run in detached mode:
-```bash
-docker run -d -p 8000:8000 resume-analyzer
-```
-
-- View logs:
-```bash
-docker logs <container_id>
-```
 
 - Stop the container:
 ```bash
