@@ -1,8 +1,8 @@
-# Resume Analyzer API (v1.1.0)
+# Resume Matcher
 
 This project provides a modular API for parsing resumes and matching them against job descriptions using NLP techniques.
 
-## Features (Enhanced)
+## Features 
 
 *   Parses resumes from PDF, DOCX, and TXT formats.
 *   Extracts key information into a structured JSON format (based on JSON Resume schema), with **enhanced parsing for work experience dates, education details (GPA, courses), projects, and certificates**.
