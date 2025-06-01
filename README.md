@@ -143,15 +143,4 @@ The `/analyze/` endpoint returns a JSON object like this:
    - Match score against the job description
    - Detailed matching information
 
-## Notes
-- The system creates temporary files in the `temp_uploads` directory
-- These files are automatically cleaned up after processing
-- The API runs locally on your machine
-
-
-
-- Stop the container:
-```bash
-docker stop <container_id>
-```
 
